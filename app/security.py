@@ -31,7 +31,7 @@ from datetime import datetime, timedelta, timezone
 import bcrypt
 import jwt
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -60,11 +60,15 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 BORROW_DAYS = 14
 MAX_BOOKS_PER_USER = 3
 
-# "Công cụ" của FastAPI: nói cho FastAPI biết token được gửi ở đâu.
-# → đọc header:  Authorization: Bearer <token>
-# → KHÔNG có token → tự trả 401 (không cần tự viết code kiểm tra).
-# → tokenUrl chỉ để khai báo cho Swagger UI hiện nút Authorize, không tự gọi.
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+# "Công cụ" của FastAPI: đọc token từ header: Authorization: Bearer <token>
+# ⭐ Dùng HTTPBearer thay cho OAuth2PasswordBearer — LÝ DO:
+#   Swagger UI (OAuth2 password flow) chỉ hiểu token response theo CHUẨN
+#   OAuth2: {"access_token": "..."} ở tầng cao nhất. App ta bọc token trong
+#   format 6 trường (data.access_token) → Swagger "Authorized" nhưng KHÔNG
+#   lấy được token → request sau bị 401.
+#   HTTPBearer → Swagger hiện ô dán thẳng token (không cần client_id/secret).
+# auto_error=False → tự xử lý 401 trong get_current_user (giữ hành vi cũ).
+oauth2_scheme = HTTPBearer(auto_error=False)
 
 
 # ---------------------------------------------------------------
@@ -125,7 +129,7 @@ def create_access_token(data: dict) -> str:
 
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme),
+    credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
 ) -> User:
     """LÁ CHẮN (dependency) đặt trước mọi endpoint cần đăng nhập.
@@ -147,6 +151,11 @@ def get_current_user(
         detail="Không thể xác thực thông tin đăng nhập",
         headers={"WWW-Authenticate": "Bearer"},  # chuẩn HTTP: báo client "gửi Bearer token"
     )
+    # HTTPBearer(auto_error=False): không có header → credentials = None
+    # → tự raise 401 (giống hành vi OAuth2PasswordBearer cũ).
+    token = credentials.credentials if credentials else None
+    if not token:
+        raise credentials_exception
     try:
         # Giải mã + kiểm tra chữ ký + kiểm tra exp.
         # - Token bị sửa → chữ ký không khớp → PyJWTError
