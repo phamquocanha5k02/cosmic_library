@@ -1,9 +1,9 @@
 /* ============================================================
    app.js — Cosmic Library Frontend v2
-   Connects to FastAPI backend at http://127.0.0.1:8000
+   Connects to FastAPI backend at same origin (relative paths)
    ============================================================ */
 
-const API = 'http://127.0.0.1:8000';
+const API = '';
 
 /* ---- STATE ---- */
 const state = {
