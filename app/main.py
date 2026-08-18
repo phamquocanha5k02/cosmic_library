@@ -34,16 +34,18 @@ from app import models  # noqa: F401
 from app.database import Base, engine
 from app.response import build_response
 from app.routers import auth, books, borrows, categories
+from app.seed import seed_if_empty
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Chạy 1 lần khi server KHỞI ĐỘNG (trước khi nhận request).
 
-    create_all = tự tạo các bảng chưa tồn tại trong DB.
-    (đã tồn tại thì bỏ qua — không xoá dữ liệu cũ, an toàn).
+    - create_all: tự tạo các bảng chưa tồn tại trong DB.
+    - seed_if_empty: tạo admin + sách mẫu nếu DB trống (quan trọng khi
+      dùng Postgres — DB mới không có sẵn seed như file library.db).
     """
-    Base.metadata.create_all(bind=engine)
+    seed_if_empty()
     yield
 
 

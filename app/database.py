@@ -18,25 +18,33 @@ import shutil
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# connect_args={"check_same_thread": False}: SQLite chỉ cho phép dùng trong
-# 1 thread; FastAPI chạy đa thread → cần tắt kiểm tra này (chỉ riêng SQLite).
-# ─── Chọn vị trí file DB ───
-# Vercel (serverless): filesystem CHỈ ĐỌC, chỉ /tmp ghi được.
-# → copy file library.db (seed) từ thư mục dự án sang /tmp để app có thể ghi.
-# (Dữ liệu mới trên /tmp sẽ mất khi instance "nguội" — chấp nhận cho demo.)
+# ─── Chọn DATABASE ───
+# Ưu tiên Postgres nếu có biến môi trường DATABASE_URL (set trên Vercel,
+# Neon, Supabase...) → dữ liệu BỀN VỮNG, mọi instance dùng chung 1 DB.
+# Không có → fallback SQLite (demo/local).
 DB_NAME = "library.db"
 _SEED_DB = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", DB_NAME))
 
-if os.environ.get("VERCEL"):
-    DB_PATH = f"/tmp/{DB_NAME}"
-    if not os.path.exists(DB_PATH) and os.path.exists(_SEED_DB):
-        shutil.copy(_SEED_DB, DB_PATH)
+DATABASE_URL = os.getenv("DATABASE_URL", "")
+
+if DATABASE_URL:
+    # Postgres — không cần check_same_thread (chỉ dành riêng cho SQLite)
+    connect_args = {}
 else:
-    DB_PATH = _SEED_DB
+    # SQLite: Vercel (serverless) filesystem CHỈ ĐỌC, chỉ /tmp ghi được
+    # → copy file library.db (seed) sang /tmp để app có thể ghi.
+    if os.environ.get("VERCEL"):
+        DB_PATH = f"/tmp/{DB_NAME}"
+        if not os.path.exists(DB_PATH) and os.path.exists(_SEED_DB):
+            shutil.copy(_SEED_DB, DB_PATH)
+    else:
+        DB_PATH = _SEED_DB
+    DATABASE_URL = f"sqlite:///{DB_PATH}"
+    # connect_args={"check_same_thread": False}: SQLite chỉ cho phép dùng
+    # trong 1 thread; FastAPI chạy đa thread → cần tắt kiểm tra này.
+    connect_args = {"check_same_thread": False}
 
-DATABASE_URL = f"sqlite:///{DB_PATH}"
-
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 
 # SessionLocal = "nhà máy" sản xuất phiên làm việc (Session).
 # autoflush/autocommit=False: kiểm soát thời điểm ghi DB bằng tay (commit).

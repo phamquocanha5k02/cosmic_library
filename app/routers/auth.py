@@ -24,7 +24,13 @@ from app.database import get_db
 from app.models import User
 from app.response import build_response
 from app.schemas import ApiResponse, UserCreate, UserOut
-from app.security import create_access_token, get_current_user, hash_password, verify_password
+from app.security import (
+    create_access_token,
+    get_current_user,
+    hash_password,
+    require_admin,
+    verify_password,
+)
 
 # prefix = tiền tố URL tự động cộng vào mọi route trong router này.
 # Ví dụ: @router.post("/register") → URL đầy đủ: /api/auth/register
@@ -114,3 +120,17 @@ def read_me(request: Request, current_user: User = Depends(get_current_user)):
     """
     data = UserOut.model_validate(current_user)  # ẩn hashed_password
     return build_response(200, "Thông tin người dùng", data=data, path=request.url.path)
+
+
+@router.get("/users", response_model=ApiResponse)
+def list_users(request: Request, db: Session = Depends(get_db),
+               current_user: User = Depends(require_admin)):
+    """ADMIN: xem toàn bộ user đã đăng ký (ẩn hashed_password).
+
+    ⭐ require_admin = LÁ CHẮN 2 LỚP:
+       - get_current_user (bên trong require_admin): xác thực trước
+       - kiểm tra role == "admin" → member gọi sẽ bị 403
+    """
+    users = db.query(User).order_by(User.id).all()
+    data = [UserOut.model_validate(u) for u in users]
+    return build_response(200, "Danh sách người dùng", data=data, path=request.url.path)
