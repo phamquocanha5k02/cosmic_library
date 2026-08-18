@@ -1,0 +1,821 @@
+/* ============================================================
+   ASTRALIS/COSMIC LIBRARY — Style cho các trang chức năng
+   (Kho sách, Đăng nhập, Đăng ký, Mượn của tôi, Quản trị)
+   ============================================================ */
+
+/* ============ NAVBAR: user + logout ============ */
+
+.navbar__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar__user-name {
+  font-weight: 600;
+  color: var(--purple-200);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar__logout {
+  padding: 8px 18px;
+  font-size: 0.88rem;
+}
+
+.navbar__mobile-cta {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ============ AUTH PAGES (login / register) ============ */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: calc(var(--nav-height) + 48px);
+  padding-bottom: 64px;
+}
+
+.auth-card {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 52px;
+  border-radius: var(--radius-card);
+  background: linear-gradient(160deg, rgba(46, 16, 101, 0.6), rgba(12, 3, 38, 0.92));
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.auth-card__title {
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  line-height: 1.2;
+  margin: 6px 0 12px;
+}
+
+.auth-card__description {
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  font-size: 0.98rem;
+}
+
+.auth-card__form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-card__submit {
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.auth-card__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-card__error {
+  color: #fda4af;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+}
+
+.auth-card__switch {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.auth-card__link {
+  color: var(--purple-300);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.25s ease;
+}
+
+.auth-card__link:hover {
+  color: var(--purple-200);
+}
+
+/* Hành tinh trang trí góc thẻ */
+.auth-card__planet {
+  position: absolute;
+  top: -70px;
+  right: -70px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(245, 243, 255, 0.4), rgba(196, 181, 253, 0.15) 55%, transparent 70%);
+  animation: float 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ============ BOOKS PAGE ============ */
+
+.books-page {
+  padding-top: calc(var(--nav-height) + 48px);
+  min-height: 80vh;
+}
+
+.books-page__header {
+  max-width: 720px;
+  margin-bottom: 40px;
+}
+
+.books-page__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 6px 0 14px;
+}
+
+.books-page__description {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+}
+
+/* Thanh công cụ: tìm kiếm + chips thể loại */
+.books-page__toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.books-page__search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 520px;
+  padding: 4px 18px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(167, 139, 250, 0.35);
+  background: rgba(21, 10, 56, 0.6);
+  color: var(--text-dim);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.books-page__search:focus-within {
+  border-color: var(--purple-400);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+}
+
+.books-page__search input {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.books-page__search input::placeholder {
+  color: var(--text-dim);
+}
+
+.books-page__search input::-webkit-search-cancel-button {
+  filter: invert(0.6);
+}
+
+.books-page__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.books-page__chip {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(167, 139, 250, 0.35);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.books-page__chip:hover {
+  border-color: var(--purple-400);
+  color: var(--purple-200);
+  transform: translateY(-2px);
+}
+
+.books-page__chip--active {
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-400));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 6px 20px var(--glow-purple);
+}
+
+/* Thông báo */
+.books-page__notice {
+  padding: 14px 18px;
+  border-radius: 14px;
+  margin-bottom: 28px;
+  font-size: 0.95rem;
+}
+
+.books-page__notice--success {
+  color: var(--purple-200);
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+}
+
+.books-page__notice--error {
+  color: #fda4af;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+.books-page__empty {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 60px 0;
+  font-size: 1.05rem;
+}
+
+.books-page__empty--error {
+  color: #fda4af;
+}
+
+/* Lưới thẻ sách */
+.books-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 28px;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(46, 16, 101, 0.5), rgba(12, 3, 38, 0.9));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  height: 100%;
+}
+
+.book-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--purple-400);
+  box-shadow: 0 18px 48px var(--glow-soft);
+}
+
+/* Bìa sách cách điệu */
+.book-card__cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 170px;
+  background: linear-gradient(135deg, var(--purple-700), var(--purple-900));
+  overflow: hidden;
+}
+
+.book-card__cover-initials {
+  font-size: 4.2rem;
+  font-weight: 700;
+  color: rgba(245, 243, 255, 0.9);
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.book-card__cover-stars {
+  position: absolute;
+  inset: 0;
+}
+
+.book-card__cover-stars i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(245, 243, 255, 0.7);
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.book-card__cover-stars i:nth-child(1) { top: 18%; left: 14%; animation-delay: 0s; }
+.book-card__cover-stars i:nth-child(2) { top: 70%; left: 20%; animation-delay: 0.7s; width: 3px; height: 3px; }
+.book-card__cover-stars i:nth-child(3) { top: 26%; left: 78%; animation-delay: 1.2s; width: 3px; height: 3px; }
+.book-card__cover-stars i:nth-child(4) { top: 78%; left: 84%; animation-delay: 1.8s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.book-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 24px 26px;
+  flex: 1;
+}
+
+.book-card__category {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--purple-300);
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.book-card__title {
+  font-size: 1.18rem;
+  line-height: 1.35;
+  color: var(--text-main);
+}
+
+.book-card__author {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.book-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.book-card__status {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.book-card__status--ok {
+  color: #86efac;
+}
+
+.book-card__status--out {
+  color: #fda4af;
+}
+
+.book-card__total {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.book-card__button {
+  margin-top: auto;
+  justify-content: center;
+  width: 100%;
+}
+
+.book-card__button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============ BORROWS PAGE ============ */
+
+.borrows-page {
+  padding-top: calc(var(--nav-height) + 48px);
+  min-height: 70vh;
+  padding-bottom: 40px;
+}
+
+.borrows-page__header {
+  max-width: 720px;
+  margin-bottom: 40px;
+}
+
+.borrows-page__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 6px 0 14px;
+}
+
+.borrows-page__description {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+}
+
+.borrows-page__subtitle {
+  font-size: 1.3rem;
+  margin: 8px 0 22px;
+  color: var(--purple-200);
+}
+
+.borrows-page__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 56px;
+}
+
+.borrow-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 26px;
+  border-radius: 24px;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: linear-gradient(160deg, rgba(46, 16, 101, 0.5), rgba(12, 3, 38, 0.9));
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.borrow-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px var(--glow-soft);
+}
+
+.borrow-card--active {
+  border-color: rgba(167, 139, 250, 0.6);
+}
+
+.borrow-card__status {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-400));
+  padding: 5px 12px;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px var(--glow-purple);
+}
+
+.borrow-card__title {
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.borrow-card__author {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.borrow-card__dates {
+  display: flex;
+  gap: 24px;
+  margin-top: 6px;
+}
+
+.borrow-card__dates div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.borrow-card__dates small {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.borrow-card__dates span {
+  color: var(--purple-200);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.borrow-card__dates .borrow-card__dates--overdue {
+  color: #fda4af;
+}
+
+.borrow-card__button {
+  margin-top: auto;
+  justify-content: center;
+}
+
+.borrow-card__button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Danh sách lịch sử đã trả */
+.borrows-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.borrow-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 24px;
+  border-radius: 18px;
+  background: rgba(21, 10, 56, 0.55);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  transition: border-color 0.3s ease;
+}
+
+.borrow-row:hover {
+  border-color: rgba(167, 139, 250, 0.5);
+}
+
+.borrow-row__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.borrow-row__title {
+  font-size: 1.02rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.borrow-row__author {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.borrow-row__dates {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.borrow-row__dates strong {
+  color: var(--purple-200);
+  font-weight: 600;
+}
+
+.borrow-row__badge {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+/* Trạng thái trống */
+.borrows-page__empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding: 80px 0;
+}
+
+.borrows-page__empty-state--small {
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px dashed rgba(167, 139, 250, 0.4);
+  margin-bottom: 56px;
+  color: var(--text-muted);
+}
+
+/* ============ ADMIN PAGE ============ */
+
+.admin-page {
+  padding-top: calc(var(--nav-height) + 48px);
+  min-height: 70vh;
+  padding-bottom: 40px;
+}
+
+.admin-page__tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.admin-page__tab {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(167, 139, 250, 0.35);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.admin-page__tab:hover {
+  border-color: var(--purple-400);
+  color: var(--purple-200);
+}
+
+.admin-page__tab--active {
+  background: linear-gradient(135deg, var(--purple-600), var(--purple-400));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 6px 20px var(--glow-purple);
+}
+
+.admin-page__content {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Form quản trị */
+.admin-form {
+  padding: 30px;
+  border-radius: 26px;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: linear-gradient(160deg, rgba(46, 16, 101, 0.45), rgba(12, 3, 38, 0.9));
+}
+
+.admin-form__title {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: var(--purple-200);
+}
+
+.admin-form__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.admin-form__grid .contact__field:nth-child(5) {
+  grid-column: span 1;
+}
+
+.admin-form__actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding-bottom: 2px;
+}
+
+/* Select trong form */
+.contact__field select {
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text-main);
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(167, 139, 250, 0.35);
+  background: rgba(21, 10, 56, 0.6);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact__field select:focus {
+  border-color: var(--purple-400);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+}
+
+.contact__field select option {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* Bảng quản trị */
+.admin-table-wrap {
+  border-radius: 26px;
+  overflow-x: auto;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(12, 3, 38, 0.6);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 16px 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--purple-300);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(46, 16, 101, 0.35);
+}
+
+.admin-table td {
+  padding: 14px 20px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.12);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.admin-table__title {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.admin-table__empty {
+  text-align: center;
+  padding: 40px !important;
+  color: var(--text-dim);
+}
+
+.admin-table__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-table__actions button {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(167, 139, 250, 0.4);
+  color: var(--purple-200);
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.admin-table__actions button:hover {
+  background: var(--purple-600);
+  border-color: var(--purple-600);
+  color: #fff;
+}
+
+.admin-table__actions .admin-table__delete {
+  color: #fda4af;
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.admin-table__actions .admin-table__delete:hover {
+  background: #e11d48;
+  border-color: #e11d48;
+  color: #fff;
+}
+
+/* ============ RESPONSIVE PAGES ============ */
+
+@media (max-width: 1024px) {
+  .books-page__grid,
+  .borrows-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-form__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-page {
+    padding-top: calc(var(--nav-height) + 24px);
+  }
+
+  .auth-card {
+    padding: 36px 26px;
+  }
+
+  .books-page__grid,
+  .borrows-page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form__actions {
+    align-items: stretch;
+  }
+
+  .borrow-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .navbar__user-name {
+    display: none;
+  }
+}

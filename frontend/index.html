@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Library &mdash; Thu Vien Vu Tru</title>
+  <meta name="description" content="He thong quan ly thu vien theo chu de khong gian vu tru." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- DEEP SPACE BACKGROUND CANVAS -->
+<canvas id="bgCanvas"></canvas>
+
+<!-- FLOATING PARTICLES -->
+<div id="particles"></div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar">
+    <!-- Left: back + brand -->
+    <div class="nav-left">
+      <button class="btn-back" id="btnBack" aria-label="Quay lai" title="Quay lai">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span class="back-label">Quay lai</span>
+      </button>
+      <div class="nav-brand" id="navBrand">
+        <canvas id="logoCanvas" width="36" height="36"></canvas>
+        <div class="nav-brand-text">
+          <span class="brand-main">Cosmic</span>
+          <span class="brand-sub">Library</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center: links -->
+    <div class="nav-links" id="navLinks">
+      <a href="#" class="nav-link active" data-view="home" id="navHome">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Trang Chu
+      </a>
+      <a href="#" class="nav-link" data-view="books" id="navBooks">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Sach
+      </a>
+      <a href="#" class="nav-link" data-view="categories" id="navCats">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        The Loai
+      </a>
+      <a href="#" class="nav-link" data-view="borrows" id="navBorrows">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Phieu Muon
+      </a>
+    </div>
+
+    <!-- Right: auth -->
+    <div class="nav-right">
+      <div class="nav-auth" id="navAuth">
+        <button class="btn-ghost" id="btnLogin">Dang Nhap</button>
+        <button class="btn-primary" id="btnRegister">Dang Ky</button>
+      </div>
+      <div class="nav-user-info hidden" id="navUserInfo">
+        <div class="user-pill">
+          <canvas class="avatar-canvas" id="avatarCanvas" width="32" height="32"></canvas>
+          <div class="user-text">
+            <span class="user-name" id="userName">---</span>
+            <span class="user-role" id="userRoleBadge">member</span>
+          </div>
+        </div>
+        <button class="btn-icon-ghost" id="btnLogout" title="Dang xuat">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN ===== -->
+  <main id="main">
+
+    <!-- BREADCRUMB BAR -->
+    <div class="breadcrumb-bar" id="breadcrumbBar">
+      <nav class="breadcrumb" id="breadcrumb" aria-label="breadcrumb"></nav>
+    </div>
+
+    <!-- HOME VIEW -->
+    <section id="viewHome" class="view active">
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-content">
+          <div class="hero-eyebrow">
+            <span class="eyebrow-dot"></span>
+            He thong thu vien hien dai
+          </div>
+          <h1 class="hero-title">
+            Kham Pha<br/>
+            <span class="gradient-text">Tri Thuc Vo Tan</span>
+          </h1>
+          <p class="hero-subtitle">
+            Hang nghin cuon sach dang cho ban. Tu khoa hoc vu tru den van chuong nhan loai,
+            moi trang sach la mot cua so ra the gioi moi.
+          </p>
+          <div class="hero-cta">
+            <button class="btn-primary btn-lg" id="heroBrowse">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Kham Pha Sach
+            </button>
+            <button class="btn-outline btn-lg" id="heroLearn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Huong Dan
+            </button>
+          </div>
+          <!-- FLOATING BOOK THUMBNAILS -->
+          <div class="hero-book-row" id="heroBookRow"></div>
+        </div>
+        <div class="hero-visual">
+          <canvas id="planetCanvas" width="400" height="400"></canvas>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row" id="statsGrid">
+        <div class="stat-chip">
+          <canvas class="stat-canvas" width="48" height="48" data-type="books"></canvas>
+          <div class="stat-info">
+            <div class="stat-val" id="statBooks">--</div>
+            <div class="stat-lbl">Dau Sach</div>
+          </div>
+        </div>
+        <div class="stat-chip">
+          <canvas class="stat-canvas" width="48" height="48" data-type="cats"></canvas>
+          <div class="stat-info">
+            <div class="stat-val" id="statCats">--</div>
+            <div class="stat-lbl">The Loai</div>
+          </div>
+        </div>
+        <div class="stat-chip">
+          <canvas class="stat-canvas" width="48" height="48" data-type="borrows"></canvas>
+          <div class="stat-info">
+            <div class="stat-val" id="statBorrows">--</div>
+            <div class="stat-lbl">Dang Muon</div>
+          </div>
+        </div>
+        <div class="stat-chip">
+          <canvas class="stat-canvas" width="48" height="48" data-type="avail"></canvas>
+          <div class="stat-info">
+            <div class="stat-val" id="statAvail">--</div>
+            <div class="stat-lbl">San Co</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURED BOOKS -->
+      <div class="section-head">
+        <h2 class="section-title">
+          <span class="section-accent"></span>
+          Sach Noi Bat
+        </h2>
+        <a href="#" class="link-more" id="homeSeaAll">Xem tat ca &rarr;</a>
+      </div>
+      <div class="book-grid" id="featuredBooks">
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+      </div>
+
+      <!-- CATEGORIES PREVIEW -->
+      <div class="section-head" style="margin-top:52px">
+        <h2 class="section-title">
+          <span class="section-accent"></span>
+          The Loai Noi Bat
+        </h2>
+        <a href="#" class="link-more" id="homeCatAll">Xem tat ca &rarr;</a>
+      </div>
+      <div class="cat-strip" id="catStrip"></div>
+    </section>
+
+    <!-- BOOKS VIEW -->
+    <section id="viewBooks" class="view">
+      <div class="view-header">
+        <div>
+          <h2 class="view-title">Thu Vien Sach</h2>
+          <p class="view-sub" id="booksCount">Dang tai...</p>
+        </div>
+        <button class="btn-primary" id="btnAddBook" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Them Sach
+        </button>
+      </div>
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" class="input-field" placeholder="Tim kiem ten sach, tac gia..." />
+          <button class="clear-search hidden" id="clearSearch">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <select id="filterCategory" class="select-field">
+          <option value="">Tat ca the loai</option>
+        </select>
+        <button class="btn-primary btn-sm" id="btnSearch">Tim Kiem</button>
+      </div>
+      <div class="book-grid" id="booksGrid">
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+        <div class="book-skeleton"></div>
+      </div>
+    </section>
+
+    <!-- CATEGORIES VIEW -->
+    <section id="viewCategories" class="view">
+      <div class="view-header">
+        <div>
+          <h2 class="view-title">The Loai Sach</h2>
+          <p class="view-sub">Phan loai sach theo chu de</p>
+        </div>
+        <button class="btn-primary" id="btnAddCat" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Them The Loai
+        </button>
+      </div>
+      <div class="cat-grid" id="catGrid">
+        <div class="book-skeleton" style="height:160px"></div>
+        <div class="book-skeleton" style="height:160px"></div>
+        <div class="book-skeleton" style="height:160px"></div>
+      </div>
+    </section>
+
+    <!-- BORROWS VIEW -->
+    <section id="viewBorrows" class="view">
+      <div class="view-header">
+        <div>
+          <h2 class="view-title">Phieu Muon</h2>
+          <p class="view-sub">Lich su muon tra sach cua ban</p>
+        </div>
+      </div>
+      <div id="borrowsContent">
+        <div class="empty-state">
+          <canvas id="emptyCanvas" width="120" height="120"></canvas>
+          <p class="empty-title">Chua dang nhap</p>
+          <p class="empty-desc">Vui long dang nhap de xem phieu muon</p>
+          <button class="btn-primary" id="borrowLoginBtn">Dang Nhap Ngay</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- LOGIN -->
+<div class="modal-overlay hidden" id="modalLogin">
+  <div class="modal">
+    <div class="modal-art">
+      <canvas id="modalArtLogin" width="420" height="120"></canvas>
+      <div class="modal-art-text">Chao mung tro lai</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-close-row">
+        <button class="btn-icon-ghost" id="closeLogin" aria-label="Dong">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <h3 class="modal-title">Dang Nhap</h3>
+      <div class="form-group">
+        <label class="form-label">Ten dang nhap</label>
+        <div class="input-wrap">
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="loginUsername" class="input-field" placeholder="username" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mat khau</label>
+        <div class="input-wrap">
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <input type="password" id="loginPassword" class="input-field" placeholder="Nhap mat khau..." />
+        </div>
+      </div>
+      <div class="form-error hidden" id="loginError"></div>
+      <button class="btn-primary btn-full" id="doLogin">Dang Nhap</button>
+      <p class="form-switch">Chua co tai khoan? <a href="#" id="switchRegister">Dang ky ngay</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="modal-overlay hidden" id="modalRegister">
+  <div class="modal">
+    <div class="modal-art">
+      <canvas id="modalArtReg" width="420" height="120"></canvas>
+      <div class="modal-art-text">Tao tai khoan moi</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-close-row">
+        <button class="btn-icon-ghost" id="closeRegister" aria-label="Dong">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <h3 class="modal-title">Dang Ky</h3>
+      <div class="form-group">
+        <label class="form-label">Ten dang nhap <span class="hint">(3-50 ky tu)</span></label>
+        <div class="input-wrap">
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="regUsername" class="input-field" placeholder="username" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ho va ten <span class="hint">(2-100 ky tu)</span></label>
+        <div class="input-wrap">
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          <input type="text" id="regFullname" class="input-field" placeholder="Nguyen Van A" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mat khau <span class="hint">(6-72 ky tu)</span></label>
+        <div class="input-wrap">
+          <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <input type="password" id="regPassword" class="input-field" placeholder="Mat khau..." />
+        </div>
+      </div>
+      <div class="form-error hidden" id="regError"></div>
+      <button class="btn-primary btn-full" id="doRegister">Tao Tai Khoan</button>
+      <p class="form-switch">Da co tai khoan? <a href="#" id="switchLogin">Dang nhap</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ADD BOOK -->
+<div class="modal-overlay hidden" id="modalAddBook">
+  <div class="modal modal-wide">
+    <div class="modal-body">
+      <div class="modal-close-row" style="margin-bottom:8px">
+        <h3 class="modal-title" style="margin:0">Them Sach Moi</h3>
+        <button class="btn-icon-ghost" id="closeAddBook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Ten sach</label>
+          <input type="text" id="bookTitle" class="input-field" placeholder="Ten sach..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tac gia</label>
+          <input type="text" id="bookAuthor" class="input-field" placeholder="Tac gia..." />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nam xuat ban</label>
+          <input type="number" id="bookYear" class="input-field" placeholder="2024" min="1900" max="2026" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">So luong</label>
+          <input type="number" id="bookQty" class="input-field" placeholder="5" min="1" max="100" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">The loai</label>
+        <select id="bookCategory" class="select-field"></select>
+      </div>
+      <div class="form-error hidden" id="addBookError"></div>
+      <button class="btn-primary btn-full" id="doAddBook">Them Sach</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CATEGORY -->
+<div class="modal-overlay hidden" id="modalAddCat">
+  <div class="modal">
+    <div class="modal-body">
+      <div class="modal-close-row" style="margin-bottom:8px">
+        <h3 class="modal-title" style="margin:0">Them The Loai</h3>
+        <button class="btn-icon-ghost" id="closeAddCat">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ten the loai</label>
+        <input type="text" id="catName" class="input-field" placeholder="Vi du: Khoa hoc..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mo ta</label>
+        <input type="text" id="catDesc" class="input-field" placeholder="Mo ta the loai..." />
+      </div>
+      <div class="form-error hidden" id="addCatError"></div>
+      <button class="btn-primary btn-full" id="doAddCat">Tao The Loai</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOK DETAIL (Side Sheet) -->
+<div class="sheet-overlay hidden" id="sheetOverlay">
+  <div class="side-sheet" id="sideSheet">
+    <div class="sheet-header">
+      <button class="btn-icon-ghost" id="closeSheet">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toastContainer"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
