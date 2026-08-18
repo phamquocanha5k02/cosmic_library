@@ -49,6 +49,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Library Management API", lifespan=lifespan)
 
+
+@app.get("/", include_in_schema=False)
+async def root():
+    return build_response(200, "Library Management API", data={
+        "docs": "/docs",
+        "auth": "/api/auth",
+        "books": "/api/books",
+        "categories": "/api/categories",
+        "borrows": "/api/borrows",
+    })
+
 # ---------- CORS — cho phép frontend localhost gọi API ----------
 # allow_origins=["*"] = cho phép MỌI nguồn (ok cho dev/hackathon).
 # Project thật nên giới hạn lại: ["https://yourdomain.com"]
