@@ -1,0 +1,13 @@
+.git
+.gitignore
+.vercel
+venv
+node_modules
+**/node_modules
+.env
+.DS_Store
+__pycache__
+**/__pycache__
+*.pyc
+*.log
+opencode

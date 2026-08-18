@@ -19,10 +19,10 @@ Nhiệm vụ:
 from contextlib import asynccontextmanager
 import os
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -50,8 +50,22 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Library Management API", lifespan=lifespan)
 
 
+# ---------- ĐƯỜNG DẪN FRONTEND ----------
+# - frontend/       : vanilla HTML/JS/Canvas (phục vụ tại /ui)
+# - space_landing/  : React + Vite (build ra space_landing/dist, phục vụ tại /)
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
+REACT_DIST = os.path.join(_PROJECT_ROOT, "space_landing", "dist")
+REACT_INDEX = os.path.join(REACT_DIST, "index.html")
+
+
+def _react_index_exists() -> bool:
+    return os.path.isfile(REACT_INDEX)
+
+
 @app.get("/", include_in_schema=False)
 async def root():
+    if _react_index_exists():
+        return FileResponse(REACT_INDEX)
     return RedirectResponse(url="/ui/")
 
 # ---------- CORS — cho phép frontend localhost gọi API ----------
@@ -75,9 +89,36 @@ app.include_router(borrows.router)
 # ---------- STATIC FILES — phục vụ frontend ----------
 # Mount thư mục frontend/ tại URL /ui
 # Truy cập: http://127.0.0.1:8000/ui/index.html
-_frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+_frontend_dir = os.path.join(_PROJECT_ROOT, "frontend")
 if os.path.isdir(_frontend_dir):
     app.mount("/ui", StaticFiles(directory=_frontend_dir, html=True), name="frontend")
+
+# ---------- REACT (space_landing) — phục vụ tại "/" ----------
+# - /assets/*   : file build của Vite (Vercel sẽ đẩy lên CDN khi có app.mount)
+# - các path khác (/, /books, /login...) → SPA fallback về index.html
+if os.path.isdir(REACT_DIST):
+    assets_dir = os.path.join(REACT_DIST, "assets")
+    if os.path.isdir(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="react-assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def spa_fallback(full_path: str):
+        # Không nuốt mất /api/* và /ui/* (phải để router/mount xử lý trước)
+        if full_path and (
+            full_path.startswith(("api/", "ui/"))
+            or full_path in ("api", "ui")
+            or full_path.startswith("assets/")
+            or full_path == "assets"
+        ):
+            raise HTTPException(status_code=404, detail="Không tìm thấy tài nguyên")
+        # File thật trong dist (favicon.svg, icons.svg, ...) thì serve luôn
+        file_path = os.path.normpath(os.path.join(REACT_DIST, full_path))
+        if full_path and file_path.startswith(os.path.abspath(REACT_DIST)) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        # SPA fallback — client-side routing của React (BrowserRouter)
+        if os.path.isfile(REACT_INDEX):
+            return FileResponse(REACT_INDEX)
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài nguyên")
 
 
 # ---------- XỬ LÝ LỖI TẬP TRUNG ----------

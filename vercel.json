@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd space_landing && npm install && npm run build",
+  "functions": {
+    "app/main.py": {
+      "maxDuration": 60
+    }
+  }
+}
